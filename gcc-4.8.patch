@@ -520,24 +520,6 @@ diff -Nur gcc-4.8/libstdc++-v3/src/Makefile.in gcc-4.8/libstdc++-v3/src/Makefile
  # include <unistd.h>
  # define _GLIBCXX_USE_FUTEX
  # define _GLIBCXX_FUTEX_WAIT 0
---- gcc-6.4.0-orig/libstdc++-v3/src/filesystem/dir.cc
-+++ gcc-6.4.0-android/libstdc++-v3/src/filesystem/dir.cc
-@@ -146,7 +146,15 @@
- 
-   int err = std::exchange(errno, 0);
-   const auto entp = readdir(dirp);
-+#ifdef __ANDROID__
-+  {
-+    int tmp = err;
-+    err = errno;
-+    errno = tmp;
-+  }
-+#else
-   std::swap(errno, err);
-+#endif
- 
-   if (entp)
-     {
 --- gcc-4.8.5/gcc/doc/gcc.texi.orig	2021-06-19 07:50:23.295095803 +0000
 +++ gcc-4.8.5/gcc/doc/gcc.texi	2021-06-19 07:51:30.482959263 +0000
 @@ -87,7 +87,10 @@
